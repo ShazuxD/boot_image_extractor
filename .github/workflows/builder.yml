@@ -1,0 +1,39 @@
+name: Fastboot Rom Builder
+
+on:
+  workflow_dispatch:
+    inputs:
+      ROM_URL:
+        description: 'ROM URL'
+        required: true
+        default: 'https://sourceforge.net/projects/gabutbuild/files/fleur/evo/evolution_fleur-ota-tq2a.230405.003.e1-04280624-community-unsigned.zip/download'
+      ROM_NAME:
+        description: 'ROM NAME'
+        required: true
+        default: 'evolution_fleur-ota-community-FASTBOOT-ROM'
+jobs:
+  build:
+    if: github.event.repository.owner.id == github.event.sender.id
+    runs-on: ubuntu-20.04
+    permissions:
+      contents: write
+    steps:
+    - name: Check Out
+      uses: actions/checkout@v3
+    - name: Build Fastboot Rom
+      run: |
+        sudo apt install aria2
+        git clone https://github.com/vm03/payload_dumper --depth=1 dumper &&cd dumper &&pip3 install -r requirements.txt
+        aria2c ${{ github.event.inputs.ROM_URL }} -x16 -s50 &&unzip *.zip
+        python3 payload_dumper.py payload.bin
+        cd output
+        mkdir tools
+        cd tools &&wget https://github.com/ShazuxD/Fleur-Fastboot_Rom-Builder/raw/main/bin/tools.zip 
+        unzip *
+        cd ../ &&cp -r *.img tools/imgs &&cd tools
+        rm tools.zip
+        zip -r ${{ github.event.inputs.ROM_NAME }}.zip *
+        wget https://github.com/Sushrut1101/GoFile-Upload/raw/master/upload.sh >> /dev/null
+        chmod +x upload.sh
+        sudo apt install jq -y >> /dev/null
+        ./upload.sh *.zip
