@@ -26,14 +26,8 @@ jobs:
         git clone https://github.com/vm03/payload_dumper --depth=1 dumper &&cd dumper &&pip3 install -r requirements.txt
         aria2c ${{ github.event.inputs.ROM_URL }} -x16 -s50 &&unzip *.zip
         python3 payload_dumper.py payload.bin
-        cd output
-        mkdir tools
-        cd tools &&wget https://github.com/ShazuxD/Fleur-Fastboot_Rom-Builder/raw/main/bin/tools.zip 
-        unzip *
-        cd ../ &&cp -r *.img tools/imgs &&cd tools
-        rm tools.zip
-        zip -r ${{ github.event.inputs.ROM_NAME }}.zip *
+        echo 1
         wget https://github.com/Sushrut1101/GoFile-Upload/raw/master/upload.sh >> /dev/null
         chmod +x upload.sh
         sudo apt install jq -y >> /dev/null
-        ./upload.sh *.zip
+        ./upload.sh boot.img
