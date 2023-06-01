@@ -26,7 +26,7 @@ jobs:
         git clone https://github.com/vm03/payload_dumper --depth=1 dumper &&cd dumper &&pip3 install -r requirements.txt
         aria2c ${{ github.event.inputs.ROM_URL }} -x16 -s50 &&unzip *.zip
         python3 payload_dumper.py payload.bin
-        echo 1
+        cd output
         wget https://github.com/Sushrut1101/GoFile-Upload/raw/master/upload.sh >> /dev/null
         chmod +x upload.sh
         sudo apt install jq -y >> /dev/null
