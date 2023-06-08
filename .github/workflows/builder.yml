@@ -1,4 +1,4 @@
-name: Fastboot Rom Builder
+name: boot image dumper
 
 on:
   workflow_dispatch:
@@ -6,11 +6,11 @@ on:
       ROM_URL:
         description: 'ROM URL'
         required: true
-        default: 'https://sourceforge.net/projects/gabutbuild/files/fleur/evo/evolution_fleur-ota-tq2a.230405.003.e1-04280624-community-unsigned.zip/download'
-      ROM_NAME:
-        description: 'ROM NAME'
+        default: ' '
+      BOOT_NAME:
+        description: 'BOOT IMAGE  NAME'
         required: true
-        default: 'evolution_fleur-ota-community-FASTBOOT-ROM'
+        default: 'boot.img'
 jobs:
   build:
     if: github.event.repository.owner.id == github.event.sender.id
@@ -20,14 +20,20 @@ jobs:
     steps:
     - name: Check Out
       uses: actions/checkout@v3
-    - name: Build Fastboot Rom
+    - name: Dump boot
       run: |
+        cd ~
         sudo apt install aria2
         git clone https://github.com/vm03/payload_dumper --depth=1 dumper &&cd dumper &&pip3 install -r requirements.txt
         aria2c ${{ github.event.inputs.ROM_URL }} -x16 -s50 &&unzip *.zip
-        python3 payload_dumper.py payload.bin
-        cd output
+        python3 payload_dumper.py payload.bin & sleep 15s &&pkill python
+
+    - name: upload boot
+      run: |
+        cd ~/dumper/output
         wget https://github.com/Sushrut1101/GoFile-Upload/raw/master/upload.sh >> /dev/null
         chmod +x upload.sh
         sudo apt install jq -y >> /dev/null
-        ./upload.sh boot.img
+        mv boot.img z.img
+        mv z.img ${{ github.event.inputs.BOOT_NAME }}
+        ./upload.sh ${{ github.event.inputs.BOOT_NAME }}
