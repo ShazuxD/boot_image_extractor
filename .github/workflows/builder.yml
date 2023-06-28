@@ -25,7 +25,10 @@ jobs:
         cd ~
         sudo apt install aria2
         #git clone https://github.com/vm03/payload_dumper --depth=1 dumper &&cd dumper &&pip3 install -r requirements.txt
-        aria2c https://sourceforge.net/projects/fleur-files/files/Roms/PixelExperience/21-6-23/PixelExperience_fleur-13.0-20230620-2018-UNOFFICIAL.zip/download -x16 -s50 
+        #
+        aria2c https://downloads.sourceforge.net/project/nikgapps/Releases/Addons-T/27-Jun-2023/NikGapps-Addon-13-PixelLauncher-20230627-signed.zip?ts=gAAAAABknATNRfxZGqr2m9iN-nknRjn00WIqhZjg4msgcwHJi2jCh8I9Dv6Ct38GMDWmpQbSnlS4jgGEkuMmtoorw05gShkhCQ%3D%3D&use_mirror=webwerks&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fnikgapps%2Ffiles%2FReleases%2FAddons-T%2F27-Jun-2023%2F
+       #
+       # aria2c https://downloads.sourceforge.net/project/nikgapps/Releases/Addons-T/27-Jun-2023/NikGapps-Addon-13-PixelLauncher-20230627-signed.zip?ts=gAAAAABknATNRfxZGqr2m9iN-nknRjn00WIqhZjg4msgcwHJi2jCh8I9Dv6Ct38GMDWmpQbSnlS4jgGEkuMmtoorw05gShkhCQ%3D%3D&use_mirror=webwerks&r=https%3A%2F%2Fsourceforge.net%2Fprojects%2Fnikgapps%2Ffiles%2FReleases%2FAddons-T%2F27-Jun-2023%2F -x16 -s50 
        # python3 payload_dumper.py payload.bin & sleep 15s &&pkill python
 
     - name: upload boot
