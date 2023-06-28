@@ -24,16 +24,14 @@ jobs:
       run: |
         cd ~
         sudo apt install aria2
-        git clone https://github.com/vm03/payload_dumper --depth=1 dumper &&cd dumper &&pip3 install -r requirements.txt
-        aria2c ${{ github.event.inputs.ROM_URL }} -x16 -s50 &&unzip *.zip
-        python3 payload_dumper.py payload.bin & sleep 15s &&pkill python
+        #git clone https://github.com/vm03/payload_dumper --depth=1 dumper &&cd dumper &&pip3 install -r requirements.txt
+        aria2c https://sourceforge.net/projects/fleur-files/files/Roms/PixelExperience/21-6-23/PixelExperience_fleur-13.0-20230620-2018-UNOFFICIAL.zip/download -x16 -s50 
+       # python3 payload_dumper.py payload.bin & sleep 15s &&pkill python
 
     - name: upload boot
       run: |
-        cd ~/dumper/output
+        cd ~
         wget https://github.com/Sushrut1101/GoFile-Upload/raw/master/upload.sh >> /dev/null
         chmod +x upload.sh
         sudo apt install jq -y >> /dev/null
-        mv boot.img z.img
-        mv z.img ${{ github.event.inputs.BOOT_NAME }}
-        ./upload.sh ${{ github.event.inputs.BOOT_NAME }}
+        ./upload.sh Pi*.zip
